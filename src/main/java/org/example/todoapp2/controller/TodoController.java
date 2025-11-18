@@ -8,11 +8,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class TodoController {
+    private final TodoRepository todoRepository = new TodoRepository();
 
     @GetMapping("/todos")
-    public String todos() {
+    public String todos(Model model) {
+        List<TodoDto> todo = todoRepository.findAll();
+        model.addAttribute("todo", todo);
         return "todos";
     }
 
@@ -28,10 +33,11 @@ public class TodoController {
             Model model
     ) {
         TodoDto todoDto = new TodoDto(null, title, content, false);
-        TodoRepository todoRepository = new TodoRepository();
+      //  TodoRepository todoRepository = new TodoRepository();
 
         TodoDto todo = todoRepository.save(todoDto);
         model.addAttribute("todo", todo);
-        return "create";
+        // return "create";
+        return "redirect:/todos";
     }
 }
